@@ -1,16 +1,33 @@
 (ns todo-clj.core
-  (:require [ring.adapter.jetty :as server]))
+  (:require [compojure.core :refer [routes]]
+            [ring.adapter.jetty :as server]
+            [todo-clj.handler.main :refer [main-routes]]
+            [todo-clj.handler.todo :refer [todo-routes]]
+            [todo-clj.middleware :refer [wrap-dev]]
+            [environ.core :refer [env]]))
+
+
+(defn- wrap [handler middleware opt]
+  (if (true? opt)
+    (middleware handler)
+    (if opt
+      (middleware handler opt)
+      handler)))
+
 
 (defonce server (atom nil))
 
-(defn handler [request]
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body "<h1>Helloooo World!!!!!! this is awesome men</h1>"})
+(def app
+  (-> (routes
+        todo-routes
+        main-routes)
+      (wrap wrap-dev (:dev env))))
+
+
 
 (defn start-server []
   (when-not @server
-    (reset! server (server/run-jetty #'handler {:port 3000 :join? false}))))
+    (reset! server (server/run-jetty #'app {:port 3000 :join? false}))))
 
 (defn stop-server []
   (when @server
@@ -22,56 +39,3 @@
     (stop-server)
     (start-server)))
 
-
-(defn ok [body]
-  {:status 200
-   :body body})
-
-(defn html [res]
-  (assoc res :headers {"Content-Type" "text/html; charset=utf-8"}))
-
-(defn not-found []
-  {:status 404
-   :body "<h1>404 page not found</h1>"})
-
-(defn home-view [req]
-  "<h1>ホーム画面</h1>
-  <a href=\"/todo\">TODO 一覧</a>")
-
-(defn home [req]
-  (-> (home-view req)
-      ok
-      html))
-
-(def todo-list
-  [{:title "朝ごはんを作る"}
-  {:title "もえるゴミを出す"}
-  {:title "卵を買って帰る"}
-  {:title "お風呂掃除をする"}])
-
-(defn todo-index-view [req]
-  `("<h1>TODO 一覧</h1>"
-    "<ul>"
-    ~@(for [{:keys [title]} todo-list]
-        (str "<li>" title "</li>"))
-    "</ul>"))
-
-(defn todo-index [req]
-  (-> (todo-index-view req)
-      ok
-      html))
-
-(def routes
-  {"/" home
-   "/todo" todo-index})
-
-(defn match-route [uri]
-  (get routes uri))
-
-(defn handler [req]
-  (let [uri (:uri req)
-        maybe-fn (match-route uri)]
-    (if maybe-fn
-      (maybe-fn req)
-      (not-found))))
- 
