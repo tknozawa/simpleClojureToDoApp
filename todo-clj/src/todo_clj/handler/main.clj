@@ -1,7 +1,9 @@
 (ns todo-clj.handler.main
   (:require [compojure.core :refer [defroutes GET]]
             [compojure.route :as route]
-            [todo-clj.util.response :as res]))
+            [todo-clj.util.response :as res]
+            [todo-clj.view.main :as view]
+  ))
 
 
 (defn home-view [req]
@@ -9,7 +11,7 @@
   <a href=\"/todo\">TODO 一覧</a>")
 
 (defn home [req]
-  (-> (home-view req)
+  (-> (view/home-view req)
       res/response
       res/html))
 
