@@ -1,5 +1,6 @@
 (ns todo-clj.handler.todo
   (:require [compojure.core :refer [defroutes context GET POST]]
+            [todo-clj.db.todo :as todo]
             [todo-clj.util.response :as res]
             [todo-clj.view.todo :as view]
   ))
@@ -19,9 +20,10 @@
     "</ul>"))
 
 (defn todo-index [req]
-  (-> (view/todo-index-view req todo-list)
-      res/response
-      res/html))
+  (let [todo-list (todo/find-todo-all)]
+    (-> (view/todo-index-view req todo-list)
+        res/response
+        res/html)))
 
 (defn todo-new [req] "TODO new")
 (defn todo-new-post [req] "TODO new post")

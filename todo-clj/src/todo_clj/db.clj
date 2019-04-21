@@ -1,3 +1,5 @@
+
+
 (ns todo-clj.db
   (:require [clojure.java.jdbc :as jdbc]))
 
@@ -8,4 +10,6 @@
   (jdbc/db-do-commands
     db-spec
     (jdbc/create-table-ddl :todo [:id :serial] [:title :varchar])))
+
+
 
