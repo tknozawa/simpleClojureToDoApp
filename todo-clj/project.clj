@@ -7,7 +7,10 @@
                  [ring "1.7.1"]
                  [compojure "1.6.1"]
                  [hiccup "1.0.5"]
-                 [environ "1.0.1"]]
+                 [environ "1.0.1"]
+                 [org.clojure/java.jdbc "0.4.2"]
+                 [org.postgresql/postgresql "9.4-1205-jdbc42"]]
+  
   :plugins [[lein-environ "1.0.1"]]
   :profiles {:dev {:dependencies [[prone "1.6.1"]]
                    :env {:dev true}}}
