@@ -23,7 +23,17 @@
   (let [todo-list (todo/find-todo-all)]
     (-> (view/todo-index-view req todo-list)
         res/response
-        res/html)))
+        res/html)
+  )
+)
+
+(defn todo-new [req]
+  (-> (view/todo-new-view req)
+      res/response
+      res/html
+      ))
+
+
 
 (defn todo-new [req] "TODO new")
 (defn todo-new-post [req] "TODO new post")
