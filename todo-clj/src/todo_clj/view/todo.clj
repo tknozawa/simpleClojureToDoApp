@@ -19,4 +19,11 @@
           [:button.bg-blue "追加する"])]
        (layout/common req)))
 
+(defn todo-complete-view [req]
+  (->> [:section.card
+        [:h2 "TODO を追加しましたよ！！"]]
+       (layout/common req)
+       ))
+
+
 

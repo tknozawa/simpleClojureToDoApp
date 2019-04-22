@@ -4,7 +4,13 @@
   (:require [clojure.java.jdbc :as jdbc]))
 
 (def db-spec
-  {:dbtype "postgresql" :dbname "todo_clj_dev" :host "localhost" :port 5432 :user "Takapons" :password "password"})
+  {:dbtype "postgresql" 
+   :dbname "todo_clj_dev" 
+   :host "localhost" 
+   :port 5432 
+   :user "Takapons" 
+   :password "password"
+   })
 
 (defn migrate []
   (jdbc/db-do-commands
