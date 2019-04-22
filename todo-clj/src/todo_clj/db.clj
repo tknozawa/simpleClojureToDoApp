@@ -11,5 +11,7 @@
     db-spec
     (jdbc/create-table-ddl :todo [:id :serial] [:title :varchar])))
 
-
+(defn testfn []
+  (println 123)
+  )
 

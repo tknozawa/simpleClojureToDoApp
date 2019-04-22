@@ -26,7 +26,8 @@
         todo-routes
         main-routes)
       (wrap wrap-dev (:dev env))
-      (wrap resource/wrap-resource "public"))
+      (wrap resource/wrap-resource "public")
+  )
 )
 
 
