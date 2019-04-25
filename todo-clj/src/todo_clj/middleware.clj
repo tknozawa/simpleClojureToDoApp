@@ -1,5 +1,15 @@
-(ns todo-clj.middleware)
+(ns todo-clj.middleware
+  (:require [environ.core :refer [env]]
+            [ring.middleware.defaults :as defaults]))
 
+(fef ^:private wrap #'defaults/wrap)
+
+(defn middleware-set [handeler]
+  (-> handler
+      (wrap wrap-dev (:dev env))
+      (defaults/wrap-defaults defaults/site-defaults)))
+
+ 
 (defn- try-resolve [sym]
   (try
        (require (symbol (namespace sym)))

@@ -14,14 +14,6 @@
       (layout/common req)
   ))
 
-(defn todo-new-view [req]
-  (->> [:section.card
-        [:h2 "TODO 追加"]
-        (hf/form-to
-          [:post "/todo/new"]
-          [:input {:name :title :placeholder "TODO を入力してください"}]
-          [:button.bg-blue "追加する"])]
-       (layout/common req)))
 
 (defn todo-complete-view [req]
   (->> [:section.card
@@ -42,12 +34,32 @@
          (layout/common req)
   )))
 
+
+(defn error-messages [req]
+  (when-let [errors (:errors req)]
+    [:ul
+     (for [[k v] errors
+           msg v]
+       [:li.error-message msg])]))
+
+(defn todo-new-view [req]
+  (->> [:section.card
+        [:h2 "TODO 追加"]
+        (hf/form-to
+          [:post "/todo/new"]
+          (error-messages req)
+          [:input {:name :title :placeholder "TODO を入力してください"}]
+          [:button.bg-blue "追加する"])]
+       (layout/common req)
+  ))
+
 (defn todo-edit-view [req todo]
   (let [todo-id (get-in req [:params :todo-id])]
     (->> [:section.card
           [:h2 "TODO 編集"]
           (hf/form-to
             [:post (str "/todo" todo-id "/edit")]
+            (error-messages req)
             [:input {:name :title :value (:title todo)
                      :placeholder "TODOを入力してください"}]
             [:button.bg-blue "更新する"])]
