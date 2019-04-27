@@ -9,7 +9,7 @@
 (defn- error-view [{:as response :keys [status]}]
   (let [{:keys [name description]} (status/status status)]
     (-> `([:h1 ~name]
-          [:he ~description])
+          [:h2 ~description])
         h/html
         res/ok
         res/html)))

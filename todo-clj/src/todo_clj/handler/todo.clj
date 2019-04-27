@@ -10,26 +10,21 @@
 (def todo-validator {:title [[v/required :message "TODO を入力してください"]]})
 
 
-(def todo-list
-  [{:title "朝ごはんを作る"}
-  {:title "もえるゴミを出す"}
-  {:title "卵を買って帰る"}
-  {:title "お風呂掃除をする"}])
-
-(defn todo-index-view [req]
-  `("<h1>TODO 一覧</h1>"
-    "<ul>"
-    ~@(for [{:keys [title]} todo-list]
-        (str "<li>" title "</li>"))
-    "</ul>"))
+;(defn todo-index-view [req]
+;  `("<h1>TODO 一覧</h1>"
+;    "<ul>"
+;    ~@(for [{:keys [title]} todo-list]
+;        (str "<li>" title "</li>")
+;      )
+;    "</ul>"))
 
 (defn todo-index [req]
   (let [todo-list (todo/find-todo-all)]
     (-> (view/todo-index-view req todo-list)
         res/ok
-        res/html)
-  )
-)
+        res/html
+    )
+  ))
 
 (defn todo-new [req]
   (-> (view/todo-new-view req)
@@ -77,7 +72,8 @@
             (assoc :flash {:msg "TODO を正常に更新しました"})
             res/html
         (res/conflict!)
-        ))))
+        )
+      ))))
 
 (defn todo-delete [{:as req :keys [params]}]
   (if-let [todo (todo/find-first-todo (Long/parseLong (:todo-id params)))]
@@ -86,16 +82,15 @@
         res/html
     )
     (res/conflict!)
-    ))
+  ))
 
 
 (defn todo-delete-post [{:as req :keys [params]}]
   (let [todo-id (Long/parseLong (:todo-id params))]
     (if (pos? (first (todo/delete-todo todo-id)))
-      (-> (res/redirect "/todo")
+      (-> (res/found "/todo")
           (assoc :flash {:msg "TODO を正常に削除しました。"})
-          res/html
-      )
+          res/html)
       (res/conflict!)  
     )))
 
@@ -114,4 +109,3 @@
                     (POST "/edit" _ todo-edit-post)
                     (GET "/delete" _ todo-delete)
                     (POST "/delete" _ todo-delete-post))))
-
