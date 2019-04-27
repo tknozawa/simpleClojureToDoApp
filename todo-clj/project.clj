@@ -18,6 +18,10 @@
                 ]
 
   :plugins [[lein-environ "1.0.1"]]
+  :uberjar-name "todo-clj.jar"
   :profiles {:dev {:dependencies [[prone "1.6.1"]]
-                   :env {:dev true}}}
+                   :env {:dev true}}
+             :uberjar {:aot :all
+                       :main todo-clj.main}
+             }
 )

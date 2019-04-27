@@ -1,7 +1,12 @@
 
 
 (ns todo-clj.db
-  (:require [clojure.java.jdbc :as jdbc]))
+  (:require [clojure.java.jdbc :as jdbc]
+            [environ.core :refer [dev]]
+  ))
+
+(def db-spec
+  (:db env))
 
 (def db-spec
   {:dbtype "postgresql" 
@@ -20,4 +25,5 @@
 (defn testfn []
   (println 123)
   )
+
 
