@@ -1,13 +1,9 @@
 (ns todo-clj.middleware
   (:require [environ.core :refer [env]]
-            [ring.middleware.defaults :as defaults]))
+            [ring.middleware.defaults :as defaults]
+            [todo-clj.middleware.http-response :as http-response]
+  ))
 
-(fef ^:private wrap #'defaults/wrap)
-
-(defn middleware-set [handeler]
-  (-> handler
-      (wrap wrap-dev (:dev env))
-      (defaults/wrap-defaults defaults/site-defaults)))
 
  
 (defn- try-resolve [sym]
@@ -27,4 +23,11 @@
              wrap-reload)
          (throw (RuntimeException. "Middleware requires ring/ring-devel and prone;")))))
 
+(def ^:private wrap #'defaults/wrap)
+
+(defn middleware-set [handler]
+  (-> handler 
+      http-response/wrap-http-response
+      (wrap wrap-dev (:dev env))
+      (defaults/wrap-defaults defaults/site-defaults)))
 
