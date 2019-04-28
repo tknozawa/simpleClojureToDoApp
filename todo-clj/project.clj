@@ -20,8 +20,10 @@
   :plugins [[lein-environ "1.0.1"]]
   :uberjar-name "todo-clj.jar"
   :profiles {:dev {:dependencies [[prone "1.6.1"]]
-                   :env {:dev true}}
+                   :env {:dev true
+                         :db {:dbtype "postgresql" :dbname "todo_clj_dev" :host "localhost" :port 5432 :user "Takapons" :password "password"}}}
              :uberjar {:aot :all
                        :main todo-clj.main}
              }
+  :min-lein-version "2.5.3"
 )
